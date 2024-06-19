@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Card, CardGroup, Stack, Container, Row, Col } from 'react-bootstrap';
+import { Button, Card, CardGroup, Container, Row, Col } from 'react-bootstrap';
 import "../global.css";
 import axios from "axios";
 import { Link } from 'react-router-dom';
@@ -26,13 +26,18 @@ function Home() {
         },[]);
 
     const handleDelete = () => {
-        axios.delete(`http://localhost:8080/users/${sessionStorage.getItem('user_id')}`)
-            .then((response) => {
-                alert('This user has been deleted');
-                navigate('/log_in')
-            }).catch(error =>{
-            console.error(error);
+        if (toDoTask.length === 0 & ipTask.length === 0 & doneTask.length === 0){
+            axios.delete(`http://localhost:8080/users/${sessionStorage.getItem('user_id')}`)
+                .then((response) => {
+                    alert('This user has been deleted');
+                    navigate('/register')
+                }).catch(error =>{
+                console.error(error);
             });
+        } else {
+            alert('Please delete all tasks');
+            navigate('/tasks');
+        }
     }
 
     const handleLogOut = () => {
@@ -45,20 +50,20 @@ function Home() {
             <Container>
                 <Row>
                     <Col xs={1}>
-                        <Button className="logoutbutton" variant="secondary" onClick={handleLogOut}>
-                            Log Out
-                        </Button>
-                        <Link to='/tasks'>
-                            <Button className="logoutbutton" variant="dark" onClick={handleDelete}>
-                                Delete User
+                        <Link to="/log_in">
+                            <Button className="logoutbutton" variant="secondary" onClick={handleLogOut}>
+                                Log Out
                             </Button>
-                        </Link>   
+                        </Link>
+                        <Button className="logoutbutton" variant="dark" onClick={handleDelete}>
+                            Delete User
+                        </Button>  
                     </Col>
                     <Col xs={1}>
-                        <Button className="taskbutton" variant="primary" size="lg">
-                            Add Tasks
-                        </Button>
-                        <Link to='/tasks'>
+                        <Link to='/tasks'>  
+                            <Button className="taskbutton" variant="primary" size="lg">
+                                Add Tasks
+                            </Button>
                             <Button className="taskbutton" variant="primary" size="lg">
                                 View Tasks
                             </Button>
