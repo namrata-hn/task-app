@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { TfiAgenda } from "react-icons/tfi";
 import { TfiHome } from "react-icons/tfi";
 import { TfiClipboard } from "react-icons/tfi";
 import { IconContext } from 'react-icons/lib';
-import LoginForm from './LoginForm';
-import ReactDOM from 'react-dom';
+import { TfiPlus } from "react-icons/tfi";
 
 export const Navigation = () => {
     return (
@@ -35,17 +34,12 @@ export const Navigation = () => {
                             <TfiClipboard />
                         </IconContext.Provider>
                     </a>
+                    <a href="add_tasks">
+                        <IconContext.Provider value={{ className: "shared-class", size: 25 }}>
+                            <TfiPlus />
+                        </IconContext.Provider>
+                    </a>
                 </div>
-                <a href="log_in">
-                    <button className="vvd">
-                    <span>Log In</span>
-                    </button>
-                </a>
-                <a href="register">
-                    <button className="vvd">
-                    <span>Register</span>
-                    </button>
-                </a>
                 </span>
             </Navbar.Collapse>
             </Container>

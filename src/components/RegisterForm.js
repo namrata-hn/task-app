@@ -26,7 +26,7 @@ function RegisterForm() {
     axios.post(`http://localhost:8080/users`, user)
             .then(response => {
               sessionStorage.setItem('user_id', response.data.id);
-              navigate('/log_in')
+              navigate('/home')
             }).catch(error =>{
             console.error(error);
             });

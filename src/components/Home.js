@@ -30,7 +30,7 @@ function Home() {
             axios.delete(`http://localhost:8080/users/${sessionStorage.getItem('user_id')}`)
                 .then((response) => {
                     alert('This user has been deleted');
-                    navigate('/register')
+                    navigate('/')
                 }).catch(error =>{
                 console.error(error);
             });
@@ -50,20 +50,22 @@ function Home() {
             <Container>
                 <Row>
                     <Col xs={1}>
-                        <Link to="/log_in">
+                        <Link to="/">
                             <Button className="logoutbutton" variant="secondary" onClick={handleLogOut}>
                                 Log Out
                             </Button>
-                        </Link>
-                        <Button className="logoutbutton" variant="dark" onClick={handleDelete}>
-                            Delete User
-                        </Button>  
+                            <Button className="logoutbutton" variant="dark" onClick={handleDelete}>
+                                Delete User
+                            </Button> 
+                        </Link> 
                     </Col>
                     <Col xs={1}>
-                        <Link to='/tasks'>  
+                        <Link to='/add_tasks'>
                             <Button className="taskbutton" variant="primary" size="lg">
                                 Add Tasks
                             </Button>
+                        </Link>    
+                        <Link to='/tasks'>  
                             <Button className="taskbutton" variant="primary" size="lg">
                                 View Tasks
                             </Button>
