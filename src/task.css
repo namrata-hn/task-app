@@ -1,3 +1,26 @@
+
 .task-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
     margin-top: 125px;
+}
+.group3.card-group{
+    padding: 5px;
+    text-align: center;
+    width: 80%; /* Adjust as needed */
+    height: auto; /* Let the height adjust automatically based on content */
+}
+.btn.btn-danger.btn-md.text-left{
+    background-color: rgb(209, 73, 73);
+    border-color: rgb(209, 73, 73);
+}
+.btn.btn-primary.btn-md.text-left{
+    background-color: rgb(73, 127, 209);
+    border-color: rgb(73, 127, 209);
+}
+.btn-btn-primary.my-2{
+    background-color: rgb(73, 127, 209);
+    border-color: rgb(73, 127, 209);
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import "../task.css";
   
@@ -9,15 +10,14 @@ const TaskForm = () => {
     const [toggleSubmit, settoggleSubmit] = useState(true);
     const [isEditItem, setisEditItem] = useState(null);
     const [showList, setshowList] = useState(true);
-    const [deleteMessage, setdeleteMessage] = useState(false);
-    const [addedMessage, setAddedMessage] = useState(false);
-    const [addedMessagesuccess, setAddedMessagesuccess] = useState(false);
     const [inputTitle, setinputTitle] = useState("");
     const [inputDesc, setinputDesc] = useState("");
     const [inputDate, setinputDate] = useState(Date.now());
     const [priority, setPriority] = useState("LOW");
     const [status, setStatus] = useState("TO DO");
     const [items, setitems] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`http://localhost:8080/tasks/users/${sessionStorage.getItem('user_id')}`)
@@ -35,7 +35,7 @@ const TaskForm = () => {
             }).catch(error =>{
                 console.error(error);
             });
-        },[showForm, isEditItem, addedMessage]);
+        },[showForm, isEditItem]);
     
     //   HANDLING INPUT FIELDS
     const handleInputTitle = (e) => {
@@ -44,18 +44,16 @@ const TaskForm = () => {
     const handleInputDesc = (e) => {
         setinputDesc(e.target.value);
     };
-    const handleInputDate = (e) => {
-        setinputDate(e.target.value)
-    }
     //   HANDLING INPUT FIELDS
     
     //   SUBMITTING FORM
     const handleSubmit = (e) => {
         setshowList(true);
         setshowNew(true);
+        setIsLoading(true);
         
         e.preventDefault();
-        if (!inputTitle || !inputDesc) {
+        if (!inputTitle) {
             alert("fill data");
             showList(false);
         } else if (inputTitle && !toggleSubmit) {
@@ -84,11 +82,14 @@ const TaskForm = () => {
                 setinputTitle("");
                 setinputDesc("");
                 setshowform(false);
-                setAddedMessage(true);
                 setTimeout(() => {
-                    setAddedMessage(false);
-                }, 2000);
-                setAddedMessagesuccess(false);
+                    setIsLoading(false);
+                    navigate("/tasks");
+                }, 1000);
+            })
+            .catch(error => {
+                console.error(error);
+                setIsLoading(false);
             });
         }
     };
@@ -96,10 +97,14 @@ const TaskForm = () => {
     
     // ADD NEW TASK
     // ADD NEW TASK
-    
     return (
     <div className="task-form">
-    
+        {isLoading ? (
+            <div class="spinner-border text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        ) : ("")}
+        
         {showForm ? (
         <>
             <div className="container border rounded d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
@@ -179,11 +184,6 @@ const TaskForm = () => {
                 </div>
             </div>
             <div>
-                {addedMessage ? (
-                <p className="text-center text-danger">Item Added Successfully</p>
-                ) : (
-                ""
-                )}
             </div>
         </>
         ) : (

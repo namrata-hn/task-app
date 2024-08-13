@@ -22,6 +22,7 @@ function LoginForm() {
             .then(response => {
               if(response.data.password===password) {
                 sessionStorage.setItem('user_id', response.data.id);
+                sessionStorage.setItem('username', username);
                 navigate('/home');
               } else
               alert('Please check username and password.');

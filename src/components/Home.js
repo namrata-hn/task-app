@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Home() {
     
-    const username = sessionStorage.getItem('user_id');
+    const username = sessionStorage.getItem('username');
     const navigate = useNavigate();
     const [toDoTask, setToDoTask] = useState([]);
     const [ipTask, setIpTask] = useState([]);
@@ -36,7 +36,7 @@ function Home() {
             });
         } else {
             alert('Please delete all tasks');
-            navigate('/tasks');
+            //navigate('/tasks');
         }
     }
 
@@ -44,9 +44,22 @@ function Home() {
         sessionStorage.removeItem('user_id');
     }
 
+    const handleDeleteAllTasks = () => {
+        axios.delete(`http://localhost:8080/tasks/users/${sessionStorage.getItem('user_id')}`)
+            .then((response) => {
+                alert('All tasks have been deleted');
+                // You might want to update your tasks state here to reflect the changes
+                setToDoTask([]);
+                setIpTask([]);
+                setDoneTask([]);
+            }).catch(error =>{
+                console.error(error);
+            });
+    }    
+
     return (
         <div className="group2"> 
-            <h1>Welcome, User #{username}</h1>
+            <h1>Welcome, {username}</h1>
             <Container>
                 <Row>
                     <Col xs={1}>
@@ -106,9 +119,13 @@ function Home() {
                                 <small className="text-muted">You did it!</small>
                             </Card.Footer>
                         </Card>
+                        
                         </CardGroup>
                     </Col>
                 </Row>
+                <Button className="taskbutton" variant="danger" onClick={handleDeleteAllTasks}>
+                    Delete All Tasks
+                </Button>
             </Container>    
         </div>
     );

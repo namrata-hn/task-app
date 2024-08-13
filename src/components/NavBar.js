@@ -5,8 +5,12 @@ import { TfiHome } from "react-icons/tfi";
 import { TfiClipboard } from "react-icons/tfi";
 import { IconContext } from 'react-icons/lib';
 import { TfiPlus } from "react-icons/tfi";
+import { useLocation } from "react-router-dom";
 
 export const Navigation = () => {
+    const location = useLocation();
+    const isLandingPage = location.pathname === "/";
+
     return (
         <>
         <Navbar expand="md">
@@ -24,21 +28,25 @@ export const Navigation = () => {
                 </Nav>
                 <span className="navbar-text">
                 <div className="social-icon">
-                    <a href="home">
-                        <IconContext.Provider value={{ className: "shared-class", size: 25 }}>
-                            <TfiHome />
-                        </IconContext.Provider>
-                    </a>
-                    <a href="tasks">
-                        <IconContext.Provider value={{ className: "shared-class", size: 25 }}>
-                            <TfiClipboard />
-                        </IconContext.Provider>
-                    </a>
-                    <a href="add_tasks">
-                        <IconContext.Provider value={{ className: "shared-class", size: 25 }}>
-                            <TfiPlus />
-                        </IconContext.Provider>
-                    </a>
+                    {!isLandingPage && (
+                        <>
+                            <a href="home" title="Home">
+                                <IconContext.Provider value={{ className: "shared-class", size: 25 }}>
+                                    <TfiHome />
+                                </IconContext.Provider>
+                            </a>
+                            <a href="tasks" title="Task List">
+                                <IconContext.Provider value={{ className: "shared-class", size: 25 }}>
+                                    <TfiClipboard />
+                                </IconContext.Provider>
+                            </a>
+                            <a href="add_tasks" title="Add Tasks">
+                                <IconContext.Provider value={{ className: "shared-class", size: 25 }}>
+                                    <TfiPlus />
+                                </IconContext.Provider>
+                            </a>
+                        </>
+                    )}
                 </div>
                 </span>
             </Navbar.Collapse>

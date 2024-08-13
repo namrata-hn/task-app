@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Alert, Card, CardGroup } from 'react-bootstrap';
 import "../task.css";
-import ReactDOM from 'react-dom';
-import TaskForm from "./TaskForm";
   
 const Tasks = () => {
     const [showForm, setshowform] = useState(false);
@@ -21,11 +20,17 @@ const Tasks = () => {
     const [status, setStatus] = useState("TO DO");
     const [items, setitems] = useState([]);
     const [addedMessage, setAddedMessage] = useState(false);
+    const [toDoTask, setToDoTask] = useState([]);
+    const [ipTask, setIpTask] = useState([]);
+    const [doneTask, setDoneTask] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:8080/tasks/users/${sessionStorage.getItem('user_id')}`)
             .then(response => {
-                setitems(response.data)
+                setitems(response.data);
+                setToDoTask(response.data.filter((task) => task.status === 'TO DO'))
+                setIpTask(response.data.filter((task) => task.status === 'IN PROGRESS'))
+                setDoneTask(response.data.filter((task) => task.status === 'DONE'))
             }).catch(error =>{
                 console.error(error);
             });
@@ -35,6 +40,9 @@ const Tasks = () => {
         axios.get(`http://localhost:8080/tasks/users/${sessionStorage.getItem('user_id')}`)
             .then(response => {
                 setitems(response.data)
+                setToDoTask(response.data.filter((task) => task.status === 'TO DO'))
+                setIpTask(response.data.filter((task) => task.status === 'IN PROGRESS'))
+                setDoneTask(response.data.filter((task) => task.status === 'DONE'))
             }).catch(error =>{
                 console.error(error);
             });
@@ -47,9 +55,6 @@ const Tasks = () => {
     const handleInputDesc = (e) => {
         setinputDesc(e.target.value);
     };
-    const handleInputDate = (e) => {
-        setinputDate(e.target.value)
-    }
     //   HANDLING INPUT FIELDS
     
     //   SUBMITTING FORM
@@ -237,15 +242,74 @@ const Tasks = () => {
                 </div>
             </div>
             <div>
-                {addedMessage ? (
-                <p className="text-center text-danger">Item Updated Successfully</p>
-                ) : (
+            {addedMessage ? (
+                <Alert variant="success">Item Added Successfully</Alert>
+            ) : (
                 ""
-                )}
+            )}
             </div>
         </>
         ) : (
         ""
+        )}
+        
+        {!showForm && (
+            <CardGroup className="group3"> 
+                <Card>
+                    <Card.Body>
+                        <Card.Title>To Do</Card.Title>
+                        <Card.Text>
+                            <p>___________________</p>
+                            {toDoTask.map((toDoTask) => (
+                                <div key={toDoTask.id}>
+                                    <h2>{toDoTask.title}</h2>
+                                    <h5>{toDoTask.dueDate}</h5>
+                                    <p>___________________</p>
+                                </div>
+                            ))}
+                        </Card.Text>
+                    </Card.Body>
+                    <Card.Footer>
+                        <small className="text-muted">Get started!</small>
+                    </Card.Footer>
+                </Card>
+                <Card>
+                    <Card.Body>
+                        <Card.Title>In Progress</Card.Title>
+                        <Card.Text>
+                            <p>___________________</p>
+                            {ipTask.map((ipTask) => (
+                                <div key={ipTask.id}>
+                                    <h2>{ipTask.title}</h2>
+                                    <h5>{ipTask.dueDate}</h5>
+                                    <p>___________________</p>
+                                </div>
+                            ))}
+                        </Card.Text>
+                    </Card.Body>
+                    <Card.Footer>
+                        <small className="text-muted">Keep going!</small>
+                    </Card.Footer>
+                </Card>
+                <Card>
+                    <Card.Body>
+                        <Card.Title>Done</Card.Title>
+                        <Card.Text>
+                            <p>___________________</p>
+                            {doneTask.map((doneTask) => (
+                                <div key={doneTask.id}>
+                                    <h2>{doneTask.title}</h2>
+                                    <h5>{doneTask.dueDate}</h5>
+                                    <p>___________________</p>
+                                </div>
+                            ))}
+                        </Card.Text>
+                    </Card.Body>
+                    <Card.Footer>
+                        <small className="text-muted">You did it!</small>
+                    </Card.Footer>
+                </Card>
+            </CardGroup>
         )}
 
         {showList ? (
@@ -295,11 +359,11 @@ const Tasks = () => {
             );
             })}
             <div>
-                {deleteMessage ? (
-                <p className="text-center text-danger">Item Deleted Successfully</p>
-                ) : (
+            {deleteMessage ? (
+                <Alert variant="danger">Item Deleted Successfully</Alert>
+            ) : (
                 ""
-                )}
+            )}
             </div>
         </div>
         ) : (
